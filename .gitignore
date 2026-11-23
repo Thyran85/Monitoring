@@ -1,0 +1,18 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+backend/venv/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# Éditeur / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

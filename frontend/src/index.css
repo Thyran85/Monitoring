@@ -1,0 +1,90 @@
+/*
+ * Système de design — « panneau d'instrument ».
+ *
+ * Thèse : la couleur N'EXPRIME QUE l'état du système.
+ * Aucun bleu de lien, aucun accent décoratif : si quelque chose est
+ * coloré, c'est qu'un état (NORMAL / WARNING / CRITICAL) le porte.
+ * Tout le reste vit en encre, gris de filet et papier.
+ */
+
+@import "tailwindcss";
+
+/* Polices embarquées (npm, pas de CDN : le dashboard marche hors-ligne) */
+@import "@fontsource/instrument-sans/400.css";
+@import "@fontsource/instrument-sans/500.css";
+@import "@fontsource/instrument-sans/600.css";
+@import "@fontsource/instrument-sans/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+
+@theme {
+  /* Papier / encre / filets */
+  --color-paper: #f1f3f4;
+  --color-surface: #ffffff;
+  --color-ink: #14181c;
+  --color-ink-soft: #5b646c;
+  --color-ink-faint: #8b959d;
+  --color-rule: #d8dde0;
+
+  /* États — teintes profondes : lisibles en blanc sur la bande,
+     et suffisamment calmes pour que NORMAL ne crie pas. */
+  --color-normal: #0b5c3a;
+  --color-normal-soft: #e2efe8;
+  --color-warning: #b35900;
+  --color-warning-soft: #f8ead9;
+  --color-critical: #a31d15;
+  --color-critical-soft: #f8e3e1;
+
+  --font-display: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-feature-settings: "kern" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Focus visible obligatoire : accessibilité clavier. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Chiffres tabulaires : les valeurs ne doivent pas danser
+     entre deux actualisations. */
+  .data {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Étiquette d'instrument : mono capitales espacées. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+}
+
+/* La bande d'état change de couleur : transition douce, mais elle
+   doit rester lisible immédiatement (respecte prefers-reduced-motion). */
+@media (prefers-reduced-motion: no-preference) {
+  .state-band {
+    transition: background-color 420ms ease;
+  }
+}
